@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desarrollo de Sistemas | Tu Empresa</title>
+    <meta name="description" content="Creamos soluciones de software a medida para impulsar tu negocio. Desarrollo web, aplicaciones móviles y sistemas empresariales.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variables de Color (Fáciles de cambiar) --- */
+        :root {
+            --primary-color: #007BFF; /* Azul principal */
+            --secondary-color: #0056b3; /* Azul oscuro */
+            --accent-color: #28a745; /* Verde para acentos */
+            --text-color: #333;
+            --bg-color: #e6f2ff; /* <-- CAMBIO: Fondo celestito */
+            --light-gray: #e9ecef;
+            --white: #ffffff;
+        }
+
+        /* --- Estilos Generales --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--white);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; text-align: center; margin-bottom: 40px; color: var(--primary-color);}
+        h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        p { margin-bottom: 15px; }
+        section { padding: 80px 0; }
+        section:nth-child(even) { background-color: var(--bg-color); }
+
+        /* --- Header y Navegación --- */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+            font-weight: 400;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: var(--text-color);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- NUEVO: Sección Carrusel (Reemplaza al Hero) --- */
+        #inicio {
+            padding: 0; /* Quita el padding de la sección */
+            position: relative; /* Necesario para el posicionamiento absoluto de los controles */
+        }
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Ocupa toda la altura de la ventana */
+            overflow: hidden; /* Oculta las imágenes que no están en vista */
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Overlay oscuro para legibilidad del texto */
+        }
+        .carousel-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--white);
+            z-index: 1;
+            padding: 20px;
+        }
+        .carousel-content h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .carousel-content p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto; }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 2;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .carousel-button:hover { background: rgba(255, 255, 255, 0.4); }
+        .carousel-button.prev { left: 20px; }
+        .carousel-button.next { right: 20px; }
+        .carousel-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .carousel-dot.active { background: var(--white); }
+
+
+        /* --- Sección Servicios --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* --- Sección Proceso --- */
+        .process-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .process-timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .process-step {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .process-step::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--white);
+            border: 4px solid var(--primary-color);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+        .left::before { content: " "; height: 0; position: absolute; top: 32px; width: 0; z-index: 1; right: 30px; border: medium solid var(--bg-color); border-width: 10px 0 10px 10px; border-color: transparent transparent transparent var(--bg-color); }
+        .right::before { content: " "; height: 0; position: absolute; top: 32px; width: 0; z-index: 1; left: 30px; border: medium solid var(--bg-color); border-width: 10px 10px 10px 0; border-color: transparent var(--bg-color) transparent transparent; }
+        .right::after { left: -10px; }
+
+        .process-content {
+            padding: 20px 30px;
+            background-color: var(--white);
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        /* --- Sección Contacto --- */
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background: #222;
+            color: var(--white);
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .social-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .carousel-content h1 { font-size: 2.8rem; }
+            
+            .nav-menu { position: fixed; left: -100%; top: 70px; flex-direction: column; background-color: var(--white); width: 100%; text-align: center; transition: 0.3s; box-shadow: 0 10px 27px rgba(0,0,0,0.05); }
+            .nav-menu.active { left: 0; }
+            .nav-item { margin: 2.5rem 0; }
+            .hamburger { display: block; }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+            .process-timeline::after { left: 31px; }
+            .process-step { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .process-step::before { left: 60px; border: medium solid var(--white); border-width: 10px 10px 10px 0; border-color: transparent var(--white) transparent transparent; }
+            .left::after, .right::after { left: 21px; }
+            .right { left: 0%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="header">
+        <nav class="navbar container">
+            <a href="#inicio" class="logo">TuEmpresa</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#inicio" class="nav-link active">Inicio</a></li>
+                <li class="nav-item"><a href="#servicios" class="nav-link">Servicios</a></li>
+                <li class="nav-item"><a href="#proceso" class="nav-link">Proceso</a></li>
+                <li class="nav-item"><a href="#nosotros" class="nav-link">Nosotros</a></li>
+                <li class="nav-item"><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ==================== NUEVO: SECCIÓN INICIO CON CARRUSEL ==================== -->
+        <section id="inicio">
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Desarrollo de Sistemas a Medida</h1>
+                            <p>Transformamos tus ideas en soluciones tecnológicas robustas y escalables.</p>
+                            <a href="#contacto" class="cta-button">Hablemos de tu Proyecto</a>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Código Limpio y Eficiente</h1>
+                            <p>Nos enfocamos en la calidad para garantizar un rendimiento óptimo y un mantenimiento sencillo.</p>
+                            <a href="#servicios" class="cta-button">Ver Servicios</a>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Aplicaciones Móviles Intuitivas</h1>
+                            <p>Diseñamos experiencias de usuario excepcionales en iOS y Android.</p>
+                            <a href="#servicios" class="cta-button">Explorar Apps</a>
+                        </div>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Trabajo en Equipo Colaborativo</h1>
+                            <p>Creemos que la mejor tecnología surge de la sinergia entre talento y comunicación.</p>
+                            <a href="#nosotros" class="cta-button">Conoce al Equipo</a>
+                        </div>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Infraestructura en la Nube</h1>
+                            <p>Escalabilidad y seguridad para tus sistemas con las mejores soluciones cloud.</p>
+                            <a href="#servicios" class="cta-button">Saber Más</a>
+                        </div>
+                    </div>
+                    <!-- Slide 6 -->
+                    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="carousel-content">
+                            <h1>Análisis de Datos e IA</h1>
+                            <p>Extraemos valor de tu información para tomar decisiones más inteligentes.</p>
+                            <a href="#contacto" class="cta-button">Consultar</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controles del Carrusel -->
+                <button class="carousel-button prev">&#10094;</button>
+                <button class="carousel-button next">&#10095;</button>
+                <div class="carousel-nav"></div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN SERVICIOS ==================== -->
+        <section id="servicios">
+            <div class="container">
+                <h2>Nuestros Servicios</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">🌐</div>
+                        <h3>Desarrollo Web</h3>
+                        <p>Creación de sitios web y aplicaciones web modernas, rápidas y optimizadas para SEO, utilizando las últimas tecnologías.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📱</div>
+                        <h3>Aplicaciones Móviles</h3>
+                        <p>Diseñamos y desarrollamos apps nativas e híbridas para iOS y Android, ofreciendo una experiencia de usuario excepcional.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">⚙️</div>
+                        <h3>Sistemas Empresariales</h3>
+                        <p>Automatizamos procesos y optimizamos la gestión con sistemas a medida (ERP, CRM, etc.) que se integran con tu operación.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">☁️</div>
+                        <h3>Consultoría TI</h3>
+                        <p>Te asesoramos en la elección e implementación de la arquitectura tecnológica que mejor se adapte a tus objetivos de negocio.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN PROCESO ==================== -->
+        <section id="proceso">
+            <div class="container">
+                <h2>Nuestro Proceso de Trabajo</h2>
+                <div class="process-timeline">
+                    <div class="process-step left">
+                        <div class="process-content">
+                            <h3>1. Descubrimiento</h3>
+                            <p>Nos reunimos contigo para entender a fondo tus necesidades, objetivos y el público al que te diriges.</p>
+                        </div>
+                    </div>
+                    <div class="process-step right">
+                        <div class="process-content">
+                            <h3>2. Diseño y Planificación</h3>
+                            <p> Creamos los planos y prototipos de tu sistema. Definimos la arquitectura, la base de datos y las tecnologías a usar.</p>
+                        </div>
+                    </div>
+                    <div class="process-step left">
+                        <div class="process-content">
+                            <h3>3. Desarrollo</h3>
+                            <p>Nuestro equipo de expertos escribe el código, construyendo cada funcionalidad con las mejores prácticas del mercado.</p>
+                        </div>
+                    </div>
+                    <div class="process-step right">
+                        <div class="process-content">
+                            <h3>4. Testing y Lanzamiento</h3>
+                            <p>Realizamos pruebas exhaustivas para garantizar un producto libre de errores. Luego, lo ponemos en producción para tus usuarios.</p>
+                        </div>
+                    </div>
+                    <div class="process-step left">
+                        <div class="process-content">
+                            <h3>5. Soporte y Evolución</h3>
+                            <p>El lanzamiento es solo el comienzo. Ofrecemos soporte continuo y mejoras para que tu sistema siempre evolucione contigo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN NOSOTROS ==================== -->
+        <section id="nosotros">
+            <div class="container">
+                <h2>Sobre Nosotros</h2>
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <p>Somos un equipo apasionado por la tecnología y la innovación. Con más de [Número] años de experiencia, nos especializamos en crear soluciones de software que no solo funcionan, sino que generan un impacto real y medible en el éxito de nuestros clientes.</p>
+                    <p>Nuestra misión es ser el partner tecnológico estratégico que tu empresa necesita, traduciendo problemas complejos en soluciones simples, elegantes y efectivas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN CONTACTO ==================== -->
+        <section id="contacto">
+            <div class="container">
+                <h2>Contáctanos</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono (Opcional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Cuéntanos sobre tu proyecto</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TuEmpresa. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <!-- Reemplaza '#' con tus enlaces -->
+                <a href="#" aria-label="LinkedIn">in</a>
+                <a href="#" aria-label="GitHub">gh</a>
+                <a href="#" aria-label="Twitter">tw</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- Menú de Navegación Móvil ---
+            const hamburger = document.querySelector(".hamburger");
+            const navMenu = document.querySelector(".nav-menu");
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            hamburger.addEventListener("click", () => {
+                hamburger.classList.toggle("active");
+                navMenu.classList.toggle("active");
+            });
+
+            navLinks.forEach(link => link.addEventListener("click", () => {
+                hamburger.classList.remove("active");
+                navMenu.classList.remove("active");
+            }));
+
+            // --- Resaltar Enlace Activo en Navegación ---
+            window.addEventListener('scroll', () => {
+                let current = '';
+                const sections = document.querySelectorAll('section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').slice(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // --- NUEVO: Lógica del Carrusel ---
+            const track = document.querySelector('.carousel-track');
+            const slides = Array.from(track.children);
+            const nextButton = document.querySelector('.carousel-button.next');
+            const prevButton = document.querySelector('.carousel-button.prev');
+            const dotsNav = document.querySelector('.carousel-nav');
+            const dots = Array.from(dotsNav.children);
+
+            const slideWidth = slides[0].getBoundingClientRect().width;
+
+            // --- Funciones del Carrusel ---
+            const setSlidePosition = (slide, index) => {
+                slide.style.left = slideWidth * index + 'px';
+            };
+            slides.forEach(setSlidePosition);
+
+            const moveToSlide = (track, currentSlide, targetSlide) => {
+                track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
+                currentSlide.classList.remove('active');
+                targetSlide.classList.add('active');
+            }
+
+            const updateDots = (currentDot, targetDot) => {
+                currentDot.classList.remove('active');
+                targetDot.classList.add('active');
+            }
+
+            const hideShowArrows = (slides, prevButton, nextButton, targetIndex) => {
+                if (targetIndex === 0) {
+                    prevButton.classList.add('is-hidden');
+                    nextButton.classList.remove('is-hidden');
+                } else if (targetIndex === slides.length - 1) {
+                    prevButton.classList.remove('is-hidden');
+                    nextButton.classList.add('is-hidden');
+                } else {
+                    prevButton.classList.remove('is-hidden');
+                    nextButton.classList.remove('is-hidden');
+                }
+            }
+            
+            // --- Crear los puntos de navegación ---
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                if (index === 0) dot.classList.add('active');
+                dotsNav.appendChild(dot);
+            });
+
+            // --- Event Listeners del Carrusel ---
+            prevButton.addEventListener('click', e => {
+                const currentSlide = track.querySelector('.carousel-slide.active');
+                const prevSlide = currentSlide.previousElementSibling;
+                const currentDot = dotsNav.querySelector('.active');
+                const prevDot = currentDot.previousElementSibling;
+                const prevIndex = slides.findIndex(slide => slide === prevSlide);
+
+                moveToSlide(track, currentSlide, prevSlide);
+                updateDots(currentDot, prevDot);
+                hideShowArrows(slides, prevButton, nextButton, prevIndex);
+            });
+
+            nextButton.addEventListener('click', e => {
+                const currentSlide = track.querySelector('.carousel-slide.active');
+                const nextSlide = currentSlide.nextElementSibling;
+                const currentDot = dotsNav.querySelector('.active');
+                const nextDot = currentDot.nextElementSibling;
+                const nextIndex = slides.findIndex(slide => slide === nextSlide);
+
+                moveToSlide(track, currentSlide, nextSlide);
+                updateDots(currentDot, nextDot);
+                hideShowArrows(slides, prevButton, nextButton, nextIndex);
+            });
+
+            dotsNav.addEventListener('click', e => {
+                const targetDot = e.target.closest('button');
+                if (!targetDot) return;
+                const currentSlide = track.querySelector('.carousel-slide.active');
+                const currentDot = dotsNav.querySelector('.active');
+                const targetIndex = dots.findIndex(dot => dot === targetDot);
+                const targetSlide = slides[targetIndex];
+
+                moveToSlide(track, currentSlide, targetSlide);
+                updateDots(currentDot, targetDot);
+                hideShowArrows(slides, prevButton, nextButton, targetIndex);
+            });
+
+            // --- Auto-play del Carrusel ---
+            let autoplayInterval;
+            const startAutoplay = () => {
+                autoplayInterval = setInterval(() => {
+                    const currentSlide = track.querySelector('.carousel-slide.active');
+                    const nextSlide = currentSlide.nextElementSibling || slides[0]; // Vuelve al inicio si está en el último
+                    const currentDot = dotsNav.querySelector('.active');
+                    const nextDot = currentDot.nextElementSibling || dots[0];
+                    
+                    moveToSlide(track, currentSlide, nextSlide);
+                    updateDots(currentDot, nextDot);
+                }, 5000); // Cambia cada 5 segundos
+            };
+
+            const stopAutoplay = () => {
+                clearInterval(autoplayInterval);
+            };
+            
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoplay);
+            carouselContainer.addEventListener('mouseleave', startAutoplay);
+
+            // Iniciar el auto-play al cargar la página
+            startAutoplay();
+
+
+            // --- Manejo del Formulario de Contacto (Solo Visual) ---
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
+                this.reset();
+            });
+        });
+    </script>
+
+</body>
+</html>
